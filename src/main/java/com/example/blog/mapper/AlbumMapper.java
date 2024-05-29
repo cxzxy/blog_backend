@@ -1,4 +1,7 @@
 package com.example.blog.mapper;
 
-public interface AlbumMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.blog.entity.Album;
+
+public interface AlbumMapper extends BaseMapper<Album> {
 }

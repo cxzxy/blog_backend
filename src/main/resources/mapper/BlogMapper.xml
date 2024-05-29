@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.BlogMapper">
+
+    <select id="BlogList" resultType="com.example.blog.dto.BlogDTO" parameterType="com.example.blog.dto.PageDTO">
+        SELECT
+            b.blog_id,
+            b.title,
+            b.blog_content,
+            b.created_at,
+            b.updated_at,
+            p.user_name,
+            p.avatar_url,
+            p.user_id
+        FROM
+            blog b
+            JOIN profile p ON b.user_id = p.user_id
+        WHERE
+            b.user_id = #{userId}
+        ORDER BY
+            b.created_at DESC
+        LIMIT #{pageSize} OFFSET #{currentPage}
+    </select>
+
+    <!--根据用户id列表查询博客列表-->
+    <select id="BlogListByUserIds" resultType="com.example.blog.dto.BlogDTO">
+        SELECT
+            b.blog_id,
+            b.title,
+            b.blog_content,
+            b.created_at,
+            b.updated_at,
+            p.user_name,
+            p.avatar_url,
+            p.user_id
+        FROM
+            blog b
+            JOIN profile p ON b.user_id = p.user_id
+        WHERE
+            b.user_id IN
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        ORDER BY
+            b.created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+</mapper>

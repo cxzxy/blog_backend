@@ -1,6 +1,5 @@
 package com.example.blog.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.*;
@@ -29,10 +28,8 @@ public class Blog {
 
     private String blogContent;
 
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;
 
 }

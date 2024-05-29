@@ -1,4 +1,4 @@
 package com.example.blog.service;
 
-public interface GuestService {
+public interface GuestBookService {
 }

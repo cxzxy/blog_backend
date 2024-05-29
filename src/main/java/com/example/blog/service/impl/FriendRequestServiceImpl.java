@@ -2,6 +2,7 @@ package com.example.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.blog.dto.FriendDTO;
 import com.example.blog.entity.FriendRequest;
 import com.example.blog.entity.Friendship;
 import com.example.blog.entity.User;
@@ -12,6 +13,7 @@ import com.example.blog.service.FriendRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class FriendRequestServiceImpl extends ServiceImpl<FriendRequestMapper, FriendRequest> implements FriendRequestService {
@@ -97,11 +99,7 @@ public class FriendRequestServiceImpl extends ServiceImpl<FriendRequestMapper, F
     }
 
     @Override
-    public boolean deleteFriend(int userId, int friendId) {
-        QueryWrapper<FriendRequest> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId);
-        queryWrapper.eq("friend_user_id", friendId);
-//        if()
-        return true;
+    public List<FriendDTO> FriendRequestList(int userId){
+        return friendRequestMapper.FriendRequestList(userId);
     }
 }

@@ -1,15 +1,19 @@
 package com.example.blog.controller;
 
+import com.example.blog.dto.FriendDTO;
 import com.example.blog.entity.FriendRequest;
 import com.example.blog.service.FriendRequestService;
 import com.example.blog.utils.ResultUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FriendRequestController {
@@ -19,7 +23,7 @@ public class FriendRequestController {
 
 
     @ApiOperation(value = "请求添加好友")
-    @PostMapping("/friend/addtru")
+    @PostMapping("/friend/add")
     public ResultUtil<Object> addFriend(HttpServletRequest request, int friendId) {
         int userId = (int) request.getAttribute("userId");
         //请求添加好友
@@ -54,6 +58,16 @@ public class FriendRequestController {
         }
         return ResultUtil.error(200, "添加好友成功");
 
+    }
+
+    //查询所有好友请求
+    @ApiOperation(value = "查询所有好友请求")
+    @GetMapping("/friendRequests")
+    public ResultUtil<Object> listFriendRequest(HttpServletRequest request) {
+        int userId = (int) request.getAttribute("userId");
+        List<FriendDTO> friendRequests = friendRequestService.FriendRequestList(userId);
+        Map<String, Object> data = Map.of("friendRequests", friendRequests);
+        return ResultUtil.success(200, "查询成功", data);
     }
 
 }

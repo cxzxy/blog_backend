@@ -1,4 +1,7 @@
 package com.example.blog.mapper;
 
-public interface PictureMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.blog.entity.Picture;
+
+public interface PictureMapper extends BaseMapper<Picture> {
 }

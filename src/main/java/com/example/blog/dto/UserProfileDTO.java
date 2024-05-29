@@ -20,4 +20,7 @@ public class UserProfileDTO {
     private String signature;
     private String pictureUrl;
     private String avatarUrl;
+    private Boolean isFriend;
+    private String remarks;
+    private Boolean isOneself;
 }

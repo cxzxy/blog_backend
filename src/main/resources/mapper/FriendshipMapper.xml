@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.FriendshipMapper">
+
+
+    <!--查询所有好友id-->
+    <select id="selectFriendsByUserId" resultType="Integer" parameterType="Integer">
+        SELECT friend_id
+        FROM friendship
+        WHERE user_id = #{userId}
+    </select>
+
+    <!--查询推荐好友-->
+    <select id="selectRecommendFriend" resultType="com.example.blog.dto.FriendRecommandDTO" parameterType="Integer">
+        SELECT user_id, user_name, avatar_url, sex, birthday
+        FROM profile
+        WHERE user_id NOT IN
+        (
+            SELECT friend_id
+            FROM friendship
+            WHERE user_id = #{userId}
+        )
+        AND user_id != #{userId}
+        ORDER BY RAND() LIMIT 6;
+    </select>
+
+    <!--查询所有好友-->
+    <select id="selectAllFriends" resultType="com.example.blog.dto.FriendDTO" parameterType="Integer">
+        SELECT p.user_id, p.user_name, p.avatar_url, p.signature
+        FROM profile p
+        JOIN friendship f
+        ON p.user_id = f.friend_id
+        WHERE f.user_id = #{userId}
+    </select>
+</mapper>

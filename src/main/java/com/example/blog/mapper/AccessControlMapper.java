@@ -1,4 +1,7 @@
 package com.example.blog.mapper;
 
-public interface AccessControlMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.blog.entity.AccessControl;
+
+public interface AccessControlMapper extends BaseMapper<AccessControl> {
 }

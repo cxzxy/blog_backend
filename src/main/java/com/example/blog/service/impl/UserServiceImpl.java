@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.blog.dto.UserPasswordDTO;
 import com.example.blog.dto.UserRegisterDTO;
+import com.example.blog.entity.AccessControl;
 import com.example.blog.entity.Profile;
 import com.example.blog.entity.User;
+import com.example.blog.mapper.AccessControlMapper;
 import com.example.blog.mapper.ProfileMapper;
 import com.example.blog.mapper.UserMapper;
 import com.example.blog.service.UserService;
@@ -39,7 +41,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private JavaMailSenderImpl javaMailSenderImpl;
 
-
+    @Autowired
+    private AccessControlMapper accessControlMapper;
     /**
      * 用户注册方法
      * @param email 用户邮箱
@@ -48,51 +51,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int register(UserRegisterDTO user) {
-        try {
-            //检查验证码是否正确
-            String code = user.getCode();
-            String email = user.getEmail();
-            String realCode = (String) redisTemplate.opsForValue().get(email);
-            if(!code.equals(realCode)){
-                return -1;
-            }
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("email", email);
-            User existedUser = userMapper.selectOne(queryWrapper);
-            // 检查邮箱是否已被注册
-            if(existedUser != null) {
-                return -2;
-            }
-
-            // 创建用户
-            User newUser = new User();
-            Date created_at = new Date();
-            Date updated_at = new Date();
-            // 密码加密
-            newUser.setPassword(PasswordUtil.encode(user.getPassword()));
-            newUser.setEmail(email);
-            newUser.setCreatedAt(created_at);
-            newUser.setUpdatedAt(updated_at);
-            userMapper.insert(newUser);
-            // 获取用户ID映射成account
-            String account = newUser.getUserId()*2+2345+"";
-            newUser.setAccount(account);
-            userMapper.updateById(newUser);
-
-            // 创建用户档案
-            Profile profile = new Profile();
-            profile.setUserId(newUser.getUserId());
-            // 设置默认用户名
-            profile.setUserName("用户" + newUser.getUserId());
-            // 设置默认头像
-            String avatarUrl = "https://profile-avatar.csdnimg.cn/83e8ac377a404091a3774eb13c377e6c_x__mind.jpg!1";
-            profile.setAvatarUrl(avatarUrl);
-            profileMapper.insert(profile);
-            return 0;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public String register(UserRegisterDTO user) {
+        //检查验证码是否正确
+        String code = user.getCode();
+        String email = user.getEmail();
+        String realCode = (String) redisTemplate.opsForValue().get(email);
+        if(!code.equals(realCode)){
+            return "-1";
         }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email", email);
+        User existedUser = userMapper.selectOne(queryWrapper);
+        // 检查邮箱是否已被注册
+        if(existedUser != null) {
+            return "-2";
+        }
+
+        // 创建用户
+        User newUser = new User();
+        Date created_at = new Date();
+        Date updated_at = new Date();
+        // 密码加密
+        newUser.setPassword(PasswordUtil.encode(user.getPassword()));
+        newUser.setEmail(email);
+        newUser.setCreatedAt(created_at);
+        newUser.setUpdatedAt(updated_at);
+        userMapper.insert(newUser);
+        // 获取用户ID映射成account
+        String account = newUser.getUserId()*2+2345+"";
+        newUser.setAccount(account);
+        userMapper.updateById(newUser);
+
+        // 创建用户档案
+        Profile profile = new Profile();
+        profile.setUserId(newUser.getUserId());
+        // 设置默认用户名
+        profile.setUserName("用户" + newUser.getUserId());
+        // 设置默认头像
+        String avatarUrl = "https://profile-avatar.csdnimg.cn/83e8ac377a404091a3774eb13c377e6c_x__mind.jpg!1";
+        profile.setAvatarUrl(avatarUrl);
+        profileMapper.insert(profile);
+
+        // 注册成功删除验证码
+        redisTemplate.delete(email);
+        //创建权限
+        AccessControl accessControl = new AccessControl();
+        accessControl.setUserId(newUser.getUserId());
+        accessControl.setPermissionType("friends_only");
+        accessControlMapper.insert(accessControl);
+        return account;
     }
 
     /**

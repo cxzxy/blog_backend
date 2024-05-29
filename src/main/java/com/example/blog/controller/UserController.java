@@ -45,14 +45,13 @@ public class UserController {
     @ApiOperation(value = "用户注册")
     @PostMapping("/register")
     public ResultUtil<Object> register(@RequestBody UserRegisterDTO user) {
-        int status = userService.register(user);
-        if(status == -1){
+        String status = userService.register(user);
+        if(status.equals("-1")){
             return ResultUtil.error(10003, "验证码错误");
-        }else if(status == -2){
+        }else if(status.equals("-2")){
             return ResultUtil.error(10001, "用户已存在");
         }else {
-            Map<String, String> data = new HashMap<>();
-            data.put("account", status+ "");
+            Map<String, String> data = Map.of("account", status);
             return ResultUtil.success(200, "注册成功", data);
         }
     }
@@ -78,9 +77,9 @@ public class UserController {
         if(status == 0){
             return ResultUtil.success(200, "修改成功");
         }else if(status == -1){
-            return ResultUtil.error(201, "用户不存在");
+            return ResultUtil.error(10001, "用户不存在");
         }else{
-            return ResultUtil.error(202, "密码错误");
+            return ResultUtil.error(10002, "密码错误");
         }
     }
 

@@ -53,14 +53,13 @@ CREATE TABLE  IF NOT EXISTS `access_control` (
                                   `access_id` INT NOT NULL AUTO_INCREMENT,
                                   `user_id` INT NOT NULL,
                                   `permission_type` ENUM('public', 'private', 'friends_only') NOT NULL,
-                                  `Access_time` DATE NOT NULL,
                                   PRIMARY KEY (`access_id`),
                                   FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 日志表
 CREATE TABLE  IF NOT EXISTS `blog` (
-                        `blog_id` DATE NOT NULL,
+                        `blog_id` INT NOT NULL AUTO_INCREMENT,
                         `user_id` INT NOT NULL,
                         `title` VARCHAR(255) NOT NULL,
                         `blog_content` TEXT NOT NULL,
@@ -97,12 +96,12 @@ CREATE TABLE  IF NOT EXISTS `guestbook_reply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 相册表
-CREATE TABLE  IF NOT EXISTS `albums` (
-                          `albums_id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE  IF NOT EXISTS `album` (
+                          `album_id` INT NOT NULL AUTO_INCREMENT,
                           `user_id` INT NOT NULL,
-                          `albums_title` VARCHAR(255) NOT NULL,
-                          `albums_creat_time` DATE NOT NULL,
-                          PRIMARY KEY (`albums_id`),
+                          `album_title` VARCHAR(255) NOT NULL,
+                          `album_creat_time` DATE NOT NULL,
+                          PRIMARY KEY (`album_id`),
                           FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

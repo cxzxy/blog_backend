@@ -1,6 +1,5 @@
 package com.example.blog.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.*;
@@ -20,14 +19,13 @@ import java.util.Date;
 public class Album {
 
     @Id
-    @TableId(value = "albums_id", type = IdType.AUTO)
-    private Integer albumsId;
+    @TableId(value = "album_id", type = IdType.AUTO)
+    private Integer albumId;
 
     // 与用户表的 userId 关联
     private Integer userId;
 
-    private String albumsTitle;
+    private String albumTitle;
 
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date albumsCreatTime;
+    private Date albumCreatTime;
 }

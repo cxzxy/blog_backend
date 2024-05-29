@@ -1,6 +1,5 @@
 package com.example.blog.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.*;
@@ -8,7 +7,6 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 @Data
 @Builder
@@ -27,7 +25,4 @@ public class AccessControl {
     private Integer userId;
 
     private String permissionType; // 枚举类型需要转换为String或使用枚举类
-
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date accessTime;
 }

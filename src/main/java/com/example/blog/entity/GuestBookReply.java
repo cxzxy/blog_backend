@@ -16,20 +16,24 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "guestbook")
-public class Guestbook {
+@Table(name = "guestbook_reply")
+public class GuestBookReply {
     @Id
-    @TableId(value = "guestbook_id", type = IdType.AUTO)
-    private Integer guestbookId;
+    @TableId(value = "guestbook_reply_id", type = IdType.AUTO)
+    private Integer guestbookReplyId;
 
-    // 与用户表的 userId 关联
-    private Integer userId;
+    // 与留言表的 guestbookId 关联
+    private Integer guestbookId;
 
     // 与用户表的 userId 关联
     private Integer sendUserId;
 
-    private String guestbookContent;
+    // 与用户表的 userId 关联
+    private Integer receiveUserId;
+
+    private String replyContent;
 
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createdAt;
+    private Date replyTime;
+
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.FriendRequestMapper">
+
+    <!--查询好友请求-->
+    <select id="FriendRequestList" resultType="com.example.blog.dto.FriendDTO" parameterType="Integer">
+        SELECT
+            f.user_id,
+            p.user_name,
+            p.avatar_url,
+            p.signature
+        FROM
+            friend_request f
+            JOIN profile p ON f.user_id = p.user_id
+        WHERE
+            f.friend_id = #{userId}
+    </select>
+
+</mapper>

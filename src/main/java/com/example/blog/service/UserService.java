@@ -7,7 +7,7 @@ import com.example.blog.entity.User;
 
 public interface UserService extends IService<User> {
 
-    int register(UserRegisterDTO user);
+    String register(UserRegisterDTO user);
 
     int login(User user);
 
