@@ -73,6 +73,9 @@ public class AccessControlServiceImpl extends ServiceImpl<AccessControlMapper, A
 
     @Override
     public int control(int userId, int otherId) {
+        if(userId == otherId) {
+            return 1;
+        }
         AccessControl accessControl = getAccessControl(otherId);
         //空间不存在
         if(accessControl == null) {

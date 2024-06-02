@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.GuestBookReplyMapper">
+    <resultMap id="GuestBookReplyResultMap" type="com.example.blog.dto.GuestBookReplyDTO">
+        <result column="guest_book_reply_id" property="guestBookReplyId" />
+        <result column="send_user_name" property="sendUserName" />
+        <result column="send_user_id" property="sendUserId" />
+        <result column="send_user_avatar_url" property="sendUserAvatarUrl" />
+        <result column="reply_user_name" property="replyUserName" />
+        <result column="is_to_owner" property="isToOwner"/>
+        <result column="reply_content" property="replyContent" />
+        <result column="reply_time" property="replyTime" />
+    </resultMap>
+
+    <select id="selectGuestBookReplies" resultMap="GuestBookReplyResultMap">
+        SELECT
+            r.guest_book_reply_id,
+            s.user_name AS send_user_name,
+            s.user_id AS send_user_id,
+            s.avatar_url AS send_user_avatar_url,
+            COALESCE(r.receive_user_id, 'Owner') AS reply_user_name,
+            CASE WHEN r.receive_user_id IS NULL THEN TRUE ELSE FALSE END AS is_to_owner,
+            r.reply_content,
+            r.reply_time
+        FROM
+            guest_book_reply r
+                JOIN profile s ON r.send_user_id = s.user_id
+                LEFT JOIN profile u ON r.receive_user_id = u.user_id
+        WHERE
+            r.guest_book_id = #{guestBookId}
+        ORDER BY r.reply_time DESC
+    </select>
+</mapper>

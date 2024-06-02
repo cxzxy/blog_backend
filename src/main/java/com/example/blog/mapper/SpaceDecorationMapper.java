@@ -1,4 +1,7 @@
 package com.example.blog.mapper;
 
-public interface SpaceDecorationMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.blog.entity.SpaceDecoration;
+
+public interface SpaceDecorationMapper extends BaseMapper<SpaceDecoration> {
 }

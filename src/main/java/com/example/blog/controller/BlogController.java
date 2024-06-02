@@ -4,6 +4,7 @@ package com.example.blog.controller;
 import com.example.blog.dto.BlogDTO;
 import com.example.blog.dto.PageDTO;
 import com.example.blog.entity.Blog;
+import com.example.blog.service.AccessControlService;
 import com.example.blog.service.BlogService;
 import com.example.blog.utils.ResultUtil;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,9 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private AccessControlService accessControlService;
 
     //发布博客
     @ApiOperation(value = "发布博客")
@@ -55,14 +59,14 @@ public class BlogController {
         return ResultUtil.success(200, "修改成功");
     }
 
-    //查询博客
-    @ApiOperation(value = "查询博客")
+    //查询某个博客详情
+    @ApiOperation(value = "查询某个博客详情")
     @GetMapping("/blog")
     public ResultUtil<Object> getBlog(HttpServletRequest request, int blogId) {
         int userId = (int) request.getAttribute("userId");
         Blog blog = blogService.getBlog(userId, blogId);
         if(blog == null) {
-            return ResultUtil.error(10008, "博客不存在");
+            return ResultUtil.error(100010, "无权限");
         }
         return ResultUtil.success(200, "查询成功", blog);
     }
@@ -84,16 +88,25 @@ public class BlogController {
     //查询某个用户的博客
     @ApiOperation(value = "查询某个用户的博客")
     @GetMapping("/userBlogs")
-    public ResultUtil<Object> getUserBlogList(@RequestBody PageDTO pageDTO) {
+    public ResultUtil<Object> getUserBlogList(HttpServletRequest request, @RequestBody PageDTO pageDTO) {
         //权限判断
-
+        int userId = (int) request.getAttribute("userId");
+        //如果查询的不是自己的博客，需要权限判断
+        if(pageDTO.getUserId() != 0) {
+            int otherId = pageDTO.getUserId();
+            int status = accessControlService.control(userId, otherId);
+            if(status == 0) {
+                return ResultUtil.error(100010, "无权限");
+            }
+            userId = otherId;
+        }
         //分页查询
+        pageDTO.setUserId(userId);
         List<BlogDTO> blogList = blogService.getBlogList(pageDTO);
         if(blogList.isEmpty()) {
             return ResultUtil.error(10008, "没有更多博客了");
         }
-        Map<String, Object> data = Map.of("blogList", blogList);
-        return ResultUtil.success(200, "查询成功", data);
+        return ResultUtil.success(200, "查询成功", Map.of("blogList", blogList));
     }
 
     //查询所有好友的博客

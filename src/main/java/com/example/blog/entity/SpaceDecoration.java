@@ -25,7 +25,7 @@ public class SpaceDecoration {
     // 与用户表的 userId 关联
     private Integer userId;
 
-    private Integer theme; // 假设枚举类型以整型存储
+    private String themeIndex;
 
     private Date updatedAt;
 

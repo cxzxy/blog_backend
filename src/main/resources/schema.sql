@@ -70,27 +70,27 @@ CREATE TABLE  IF NOT EXISTS `blog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 留言板表
-CREATE TABLE  IF NOT EXISTS `guestbook` (
-                             `guestbook_id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE  IF NOT EXISTS `guest_book` (
+                             `guest_book_id` INT NOT NULL AUTO_INCREMENT,
                              `user_id` INT NOT NULL,
                              `send_user_id` INT NOT NULL,
-                             `guestbook_content` TEXT NOT NULL,
+                             `guest_book_content` TEXT NOT NULL,
                              `created_at` DATE NOT NULL,
-                             PRIMARY KEY (`guestbook_id`),
+                             PRIMARY KEY (`guest_book_id`),
                              FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
                              FOREIGN KEY (`send_user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 留言回复表
-CREATE TABLE  IF NOT EXISTS `guestbook_reply` (
-                                   `guestbook_reply_id` INT NOT NULL AUTO_INCREMENT,
-                                   `guestbook_id` INT NOT NULL,
+CREATE TABLE  IF NOT EXISTS `guest_book_reply` (
+                                   `guest_book_reply_id` INT NOT NULL AUTO_INCREMENT,
+                                   `guest_book_id` INT NOT NULL,
                                    `send_user_id` INT NOT NULL,
                                    `receive_user_id` INT NOT NULL,
                                    `reply_content` TEXT NOT NULL,
-                                   `replytime` DATE NOT NULL,
-                                   PRIMARY KEY (`guestbook_reply_id`),
-                                   FOREIGN KEY (`guestbook_id`) REFERENCES `guestbook`(`guestbook_id`) ON DELETE CASCADE,
+                                   `reply_time` DATE NOT NULL,
+                                   PRIMARY KEY (`guest_book_reply_id`),
+                                   FOREIGN KEY (`guest_book_id`) REFERENCES `guestbook`(`guestbook_id`) ON DELETE CASCADE,
                                    FOREIGN KEY (`send_user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
                                    FOREIGN KEY (`receive_user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -119,8 +119,8 @@ CREATE TABLE  IF NOT EXISTS `picture` (
 CREATE TABLE  IF NOT EXISTS `mood` (
                         `mood_id` INT NOT NULL AUTO_INCREMENT,
                         `user_id` INT NOT NULL,
-                        `content` VARCHAR(255) NOT NULL,
-                        `created_at` DATE NOT NULL,
+                        `mood_content` ENUM('忙忙忙','写博客ing','悠哉哉','emo中','元气满满','睡觉中') NOT NULL,
+                        `updated_at` DATE NOT NULL,
                         PRIMARY KEY (`mood_id`),
                         FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -129,7 +129,7 @@ CREATE TABLE  IF NOT EXISTS `mood` (
 CREATE TABLE  IF NOT EXISTS `space_decoration` (
                                     `space_decoration_id` INT NOT NULL AUTO_INCREMENT,
                                     `user_id` INT NOT NULL,
-                                    `theme` ENUM('0', '1', '2') NOT NULL,
+                                    `theme_index` ENUM('0', '1', '2') NOT NULL,
                                     `updated_at` DATE NOT NULL,
                                     PRIMARY KEY (`space_decoration_id`),
                                     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE

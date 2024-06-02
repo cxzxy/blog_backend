@@ -1,6 +1,5 @@
 package com.example.blog.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.*;
@@ -25,9 +24,8 @@ public class Mood {
     // 与用户表的 userId 关联
     private Integer userId;
 
-    private String content;
+    private String moodContent;
 
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createdAt;
+    private Date updatedAt;
 
 }

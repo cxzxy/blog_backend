@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.GuestBookMapper">
+    <resultMap id="GuestBookMap" type="com.example.blog.dto.GuestBookDTO">
+        <id column="guest_book_id" property="guestBookId"/>
+        <result column="user_id" property="sendUserId"/>
+        <result column="guest_book_content" property="guestBookContent"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="user_name" property="sendUserName"/>
+        <result column="avatar_url" property="sendUserAvatarUrl"/>
+    </resultMap>
+    <select id="selectGuestBooks" resultMap="GuestBookMap" parameterType="Integer">
+        SELECT
+        g.guest_book_id,
+        g.user_id,
+        g.guest_book_content,
+        g.created_at,
+        p.user_name,
+        p.avatar_url
+        FROM
+        guest_book g
+        JOIN profile p ON g.user_id = p.user_id
+        WHERE
+        g.user_id = #{otherId}
+        ORDER BY g.created_at DESC
+    </select>
+
+    <select id="selectGuestBook" resultMap="GuestBookMap" parameterType="Integer">
+        SELECT
+        g.guest_book_id,
+        g.user_id,
+        g.guest_book_content,
+        g.created_at,
+        p.user_name,
+        p.avatar_url
+        FROM
+        guest_book g
+        JOIN profile p ON g.user_id = p.user_id
+        WHERE
+        g.guest_book_id = #{guestBookId}
+    </select>
+</mapper>

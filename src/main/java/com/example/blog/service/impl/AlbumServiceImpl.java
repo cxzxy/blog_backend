@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.blog.entity.Album;
 import com.example.blog.mapper.AlbumMapper;
+import com.example.blog.service.AccessControlService;
 import com.example.blog.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class AlbumServiceImpl extends ServiceImpl<AlbumMapper, Album> implements
 
     @Autowired
     private AlbumMapper albumMapper;
+
+    @Autowired
+    private AccessControlService accessControlService;
 
     @Override
     public int createAlbum(Album album) {
@@ -30,6 +34,10 @@ public class AlbumServiceImpl extends ServiceImpl<AlbumMapper, Album> implements
 
     @Override
     public List<Album> getAlbums(int userId, int otherId) {
+        int status = accessControlService.control(userId, otherId);
+        if (status != 1) {
+            return null;
+        }
         QueryWrapper<Album> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", otherId);
         return albumMapper.selectList(queryWrapper);

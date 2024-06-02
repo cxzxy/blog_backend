@@ -6,6 +6,7 @@ import com.example.blog.entity.Album;
 import com.example.blog.entity.Picture;
 import com.example.blog.mapper.AlbumMapper;
 import com.example.blog.mapper.PictureMapper;
+import com.example.blog.service.AccessControlService;
 import com.example.blog.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
 
     @Autowired
     private AlbumMapper albumMapper;
+
+    @Autowired
+    private AccessControlService accessControlService;
 
     @Override
     public int uploadPicture(Picture picture) {
@@ -49,6 +53,13 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture> impl
         Album album = albumMapper.selectById(albumId);
         if (album == null||(album.getUserId() != otherId)) {
             return null;
+        }
+        if(userId != otherId){
+            //查看其他用户相册时，权限判断
+            int status = accessControlService.control(userId, otherId);
+            if (status != 1) {
+                return null;
+            }
         }
         QueryWrapper<Picture> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("album_id", albumId);

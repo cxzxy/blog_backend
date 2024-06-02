@@ -1,4 +1,7 @@
 package com.example.blog.mapper;
 
-public interface MoodMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.blog.entity.Mood;
+
+public interface MoodMapper extends BaseMapper<Mood> {
 }

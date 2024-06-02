@@ -52,6 +52,9 @@ public class AlbumController {
             otherId = userId;
         }
         List<Album> albums = albumService.getAlbums(userId, otherId);
+        if(albums == null) {
+            return ResultUtil.error(100010, "无权限");
+        }
         Map<String, Object> data = new HashMap<>();
         data.put("albums", albums);
         if(otherId == userId) {

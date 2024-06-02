@@ -5,12 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.blog.dto.UserPasswordDTO;
 import com.example.blog.dto.UserRegisterDTO;
-import com.example.blog.entity.AccessControl;
-import com.example.blog.entity.Profile;
-import com.example.blog.entity.User;
-import com.example.blog.mapper.AccessControlMapper;
-import com.example.blog.mapper.ProfileMapper;
-import com.example.blog.mapper.UserMapper;
+import com.example.blog.entity.*;
+import com.example.blog.mapper.*;
 import com.example.blog.service.UserService;
 import com.example.blog.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +39,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private AccessControlMapper accessControlMapper;
+
+    @Autowired
+    private MoodMapper moodMapper;
+
+    @Autowired
+    private SpaceDecorationMapper spaceDecorationMapper;
     /**
      * 用户注册方法
      * @param email 用户邮箱
@@ -95,10 +97,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 注册成功删除验证码
         redisTemplate.delete(email);
         //创建权限
-        AccessControl accessControl = new AccessControl();
-        accessControl.setUserId(newUser.getUserId());
-        accessControl.setPermissionType("friends_only");
+        AccessControl accessControl = AccessControl.builder().userId(newUser.getUserId()).permissionType("friends_only").build();
         accessControlMapper.insert(accessControl);
+        //创建心情
+        Mood mood = Mood.builder().userId(newUser.getUserId()).moodContent("悠哉哉").updatedAt(new Date()).build();
+        moodMapper.insert(mood);
+        //创建空间装扮
+        SpaceDecoration spaceDecoration = SpaceDecoration.builder().userId(newUser.getUserId()).themeIndex("0").updatedAt(new Date()).build();
+        spaceDecorationMapper.insert(spaceDecoration);
         return account;
     }
 
@@ -205,7 +211,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             return 0;
         } catch (MailException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("邮件发送失败");
         }
 
     }

@@ -15,11 +15,11 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "guestbook")
+@Table(name = "guest_book")
 public class GuestBook {
     @Id
-    @TableId(value = "guestbook_id", type = IdType.AUTO)
-    private Integer guestbookId;
+    @TableId(value = "guest_book_id", type = IdType.AUTO)
+    private Integer guestBookId;
 
     // 与用户表的 userId 关联
     private Integer userId;
@@ -27,7 +27,7 @@ public class GuestBook {
     // 与用户表的 userId 关联
     private Integer sendUserId;
 
-    private String guestbookContent;
+    private String guestBookContent;
 
     private Date createdAt;
 }

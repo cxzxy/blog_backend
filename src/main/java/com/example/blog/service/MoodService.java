@@ -1,4 +1,9 @@
 package com.example.blog.service;
 
-public interface MoodService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.blog.entity.Mood;
+
+public interface MoodService extends IService<Mood> {
+    Mood getMood(int userId);
+    int updateMood(Mood mood);
 }

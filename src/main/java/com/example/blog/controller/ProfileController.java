@@ -39,7 +39,9 @@ public class ProfileController {
     //修改用户信息
     @ApiOperation(value = "修改用户信息")
     @PutMapping("/profile")
-    public ResultUtil<Object> updateProfile(@RequestBody Profile profile) {
+    public ResultUtil<Object> updateProfile(HttpServletRequest request, @RequestBody Profile profile) {
+        int userId = (int) request.getAttribute("userId");
+        profile.setUserId(userId);
         profile = profileService.updateProfile(profile);
         if(profile == null) {
             return ResultUtil.error(10001, "用户不存在");

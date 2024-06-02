@@ -1,6 +1,5 @@
 package com.example.blog.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.*;
@@ -16,14 +15,14 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "guestbook_reply")
+@Table(name = "guest_book_reply")
 public class GuestBookReply {
     @Id
-    @TableId(value = "guestbook_reply_id", type = IdType.AUTO)
-    private Integer guestbookReplyId;
+    @TableId(value = "guest_book_reply_id", type = IdType.AUTO)
+    private Integer guestBookReplyId;
 
     // 与留言表的 guestbookId 关联
-    private Integer guestbookId;
+    private Integer guestBookId;
 
     // 与用户表的 userId 关联
     private Integer sendUserId;
@@ -33,7 +32,6 @@ public class GuestBookReply {
 
     private String replyContent;
 
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date replyTime;
 
 }

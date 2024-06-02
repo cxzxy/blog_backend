@@ -56,7 +56,7 @@ public class PictureController {
         }
         List<Picture> pictures = pictureService.getPictures(userId, albumId, otherId);
         if (pictures == null) {
-            return ResultUtil.error(10009, "参数有误");
+            return ResultUtil.error(100010, "无权限或相册不存在");
         } else {
             Map<String, Object> data = new HashMap<>();
             if (otherId == userId) {
